@@ -22,7 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,13 +45,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import com.example.coffeeapp.R
+import com.example.coffeeapp.data.entity.CartItemEntity
+import com.example.coffeeapp.ui.screens.Cart.CartViewModel
 import com.example.coffeeapp.ui.screens.ItemScreen.components.CoffeeSizeSelector
 import com.example.coffeeapp.ui.screens.ItemScreen.components.QuantitySelector
 
 @Composable
 fun ItemScreen(
+    cartViewModel: CartViewModel,
     itemTitle: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
@@ -62,6 +63,8 @@ fun ItemScreen(
 
     val itemScreenViewModel: ItemScreenViewModel = hiltViewModel()
     val item by itemScreenViewModel.itemResult.collectAsStateWithLifecycle()
+
+
 
     LaunchedEffect(Unit) { itemScreenViewModel.getItem(itemTitle) }
     val imageHeight = 320.dp
@@ -214,7 +217,18 @@ fun ItemScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                    val cartItem = CartItemEntity(
+                        coffeeId = item?.id ?: "",
+                        title = item?.title ?: "",
+                        imageUrl = item?.picUrl?.firstOrNull() ?:"",
+                        price = item?.price ?: 0.0,
+                        size = selectedSize,
+                        quantity = quantity
+                    )
+
+                    cartViewModel.addToCart(cartItem)
+                },
                 modifier = Modifier
                     .weight(1f)
                     .height(48.dp),
@@ -223,27 +237,27 @@ fun ItemScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         "Add to cart",
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+
+                    VerticalDivider(
+                        modifier = Modifier.height(14.dp),
+                        color = Color.White
+                    )
+
+                    Text(
+                        text = "AED ${item?.price ?: ""}",
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
                 }
-
-                VerticalDivider(
-                    modifier = Modifier.height(8.dp),
-                    color = Color.White
-                )
-
-                Text(
-                    text = "AED${item?.price ?: ""}",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
             }
         }
     }

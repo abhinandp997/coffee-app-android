@@ -1,6 +1,7 @@
 package com.example.coffeeapp.data.model
 
 data class CoffeeItem(
+    val id: String = "",
     val categoryId: String = "",
     val description: String = "",
     val extra: String = "",

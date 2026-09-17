@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.coffeeapp.ui.screens.Cart.CartScreen
+import com.example.coffeeapp.ui.screens.Cart.CartViewModel
 import com.example.coffeeapp.ui.screens.Explorer.ExplorerScreen
 import com.example.coffeeapp.ui.screens.HomeScreen.HomeScreen
 import com.example.coffeeapp.ui.screens.HomeScreen.components.BottomBar
@@ -29,6 +30,7 @@ import com.example.coffeeapp.ui.screens.splash.SplashScreen
 fun NavGraph() {
     val navController = rememberNavController()
     val onboardingViewModel: OnboardingViewModel = hiltViewModel()
+    val cartViewModel: CartViewModel = hiltViewModel()
 
     val hasCompletedOnboarding by onboardingViewModel.hasCompletedOnboarding.collectAsStateWithLifecycle()
 
@@ -102,7 +104,11 @@ fun NavGraph() {
             }
 
             composable(Routes.Cart.route) {
-                CartScreen()
+                CartScreen(
+                    onBack = { navController.popBackStack() },
+                    onCheckout = {},
+                    cartViewModel = cartViewModel
+                )
             }
 
             composable(Routes.Explorer.route) {
@@ -152,7 +158,8 @@ fun NavGraph() {
                 val itemTitle = backStackEntry.arguments?.getString("itemTitle") ?: ""
                 ItemScreen(
                     onBack = { navController.popBackStack() },
-                    itemTitle = itemTitle
+                    itemTitle = itemTitle,
+                    cartViewModel = cartViewModel
                 )
             }
         }
