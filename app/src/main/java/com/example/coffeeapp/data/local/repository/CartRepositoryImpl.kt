@@ -1,5 +1,6 @@
 package com.example.coffeeapp.data.local.repository
 
+import android.util.Log
 import com.example.coffeeapp.data.entity.CartItemEntity
 import com.example.coffeeapp.data.local.CartDao
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,8 @@ class CartRepositoryImpl @Inject constructor(
             coffeeId = item.coffeeId,
             size = item.size
         )
-
+        Log.d("CartItems","CartRepositoryImpl item ${item}")
+        Log.d("CartItems","CartRepositoryImpl existingItem ${existingItem}")
         if (existingItem == null) {
             cartDao.insertCartItem(item)
         } else {
@@ -27,7 +29,6 @@ class CartRepositoryImpl @Inject constructor(
                 )
             )
         }
-
     }
 
     override suspend fun updateQuantity(item: CartItemEntity) {

@@ -1,5 +1,6 @@
 package com.example.coffeeapp.navigation
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -61,7 +62,8 @@ fun NavGraph() {
             if (showBottomBar) {
                 BottomBar(navController)
             }
-        }
+        },
+        contentWindowInsets = WindowInsets(0,0,0,0)
     ) { innerPadding ->
         NavHost(
             navController = navController,

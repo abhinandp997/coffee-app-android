@@ -19,7 +19,7 @@ class FirebaseDatasource @Inject constructor(
         return snapshot.children.mapNotNull { it.getValue(Banner::class.java) }
     }
 
-    suspend fun getCategory(): List<Category>{
+    suspend fun getCategory(): List<Category> {
         val snapshot = database.child("Category")
             .get()
             .await()
@@ -27,15 +27,17 @@ class FirebaseDatasource @Inject constructor(
         return snapshot.children.mapNotNull { it.getValue(Category::class.java) }
     }
 
-    suspend fun getItems(): List<CoffeeItem>{
+    suspend fun getItems(): List<CoffeeItem> {
         val snapshot = database.child("Items")
             .get()
             .await()
 
-        return snapshot.children.mapNotNull { it.getValue(CoffeeItem::class.java) }
+        return snapshot.children.mapNotNull {
+            it.getValue(CoffeeItem::class.java)?.copy(id = it.key ?: "")
+        }
     }
 
-    suspend fun getPopularItems(): List<PopularItem>{
+    suspend fun getPopularItems(): List<PopularItem> {
         val snapshot = database.child("Popular")
             .get()
             .await()

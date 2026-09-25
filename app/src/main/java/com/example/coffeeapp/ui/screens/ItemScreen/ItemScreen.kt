@@ -1,5 +1,7 @@
 package com.example.coffeeapp.ui.screens.ItemScreen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,11 +67,13 @@ fun ItemScreen(
     val itemScreenViewModel: ItemScreenViewModel = hiltViewModel()
     val item by itemScreenViewModel.itemResult.collectAsStateWithLifecycle()
 
+    Log.d("CartItems","'itemScreen' item ${item}")
 
-
-    LaunchedEffect(Unit) { itemScreenViewModel.getItem(itemTitle) }
+    LaunchedEffect(itemTitle) { itemScreenViewModel.getItem(itemTitle) }
     val imageHeight = 320.dp
     val overlap = 40.dp
+
+    val context = LocalContext.current
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -221,13 +226,14 @@ fun ItemScreen(
                     val cartItem = CartItemEntity(
                         coffeeId = item?.id ?: "",
                         title = item?.title ?: "",
-                        imageUrl = item?.picUrl?.firstOrNull() ?:"",
+                        imageUrl = item?.picUrl?.firstOrNull() ?: "",
                         price = item?.price ?: 0.0,
                         size = selectedSize,
                         quantity = quantity
                     )
 
                     cartViewModel.addToCart(cartItem)
+                    Toast.makeText(context, "Item added to CART", Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier
                     .weight(1f)

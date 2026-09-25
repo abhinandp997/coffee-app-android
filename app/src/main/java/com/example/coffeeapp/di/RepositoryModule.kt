@@ -1,5 +1,7 @@
 package com.example.coffeeapp.di
 
+import com.example.coffeeapp.data.local.repository.CartRepository
+import com.example.coffeeapp.data.local.repository.CartRepositoryImpl
 import com.example.coffeeapp.data.repository.CoffeeRepository
 import com.example.coffeeapp.data.repository.CoffeeRepositoryImpl
 import dagger.Binds
@@ -15,5 +17,9 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindCoffeeRepository(implementation: CoffeeRepositoryImpl): CoffeeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCartRepository(implementation: CartRepositoryImpl): CartRepository
 
 }
